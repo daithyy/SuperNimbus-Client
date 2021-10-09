@@ -1,5 +1,6 @@
 ﻿using System.Net.Sockets;
 using System;
+using UnityEngine;
 
 public partial class Client
 {
@@ -117,6 +118,21 @@ public partial class Client
             }
 
             return false;
+        }
+
+        public void SendData(Packet packet)
+        {
+            try
+            {
+                if (Socket != null)
+                {
+                    stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log($"ERROR: Sending data to server via TCP {ex}");
+            }
         }
     }
 }

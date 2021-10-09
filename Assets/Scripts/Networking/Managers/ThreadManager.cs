@@ -2,32 +2,27 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThreadManager : MonoBehaviour
+public class ThreadManager: MonoBehaviour
 {
-    private static readonly List<Action> executeOnMainThread = new List<Action>();
+    private static readonly List<Action> ExecuteOnMainThreadValue = new List<Action>();
 
-    private static readonly List<Action> executeCopiedOnMainThread = new List<Action>();
+    private static readonly List<Action> ExecuteCopiedOnMainThread = new List<Action>();
 
     private static bool actionToExecuteOnMainThread = false;
 
-    private void Update()
-    {
-        UpdateMain();
-    }
-
     /// <summary>Sets an action to be executed on the main thread.</summary>
-    /// <param name="_action">The action to be executed on the main thread.</param>
-    public static void ExecuteOnMainThread(Action _action)
+    /// <param name="action">The action to be executed on the main thread.</param>
+    public static void ExecuteOnMainThread(Action action)
     {
-        if (_action == null)
+        if (action == null)
         {
             Debug.Log("No action to execute on main thread!");
             return;
         }
 
-        lock (executeOnMainThread)
+        lock (ExecuteOnMainThreadValue)
         {
-            executeOnMainThread.Add(_action);
+            ExecuteOnMainThreadValue.Add(action);
             actionToExecuteOnMainThread = true;
         }
     }
@@ -37,19 +32,24 @@ public class ThreadManager : MonoBehaviour
     {
         if (actionToExecuteOnMainThread)
         {
-            executeCopiedOnMainThread.Clear();
+            ExecuteCopiedOnMainThread.Clear();
 
-            lock (executeOnMainThread)
+            lock (ExecuteOnMainThreadValue)
             {
-                executeCopiedOnMainThread.AddRange(executeOnMainThread);
-                executeOnMainThread.Clear();
+                ExecuteCopiedOnMainThread.AddRange(ExecuteOnMainThreadValue);
+                ExecuteOnMainThreadValue.Clear();
                 actionToExecuteOnMainThread = false;
             }
 
-            for (int i = 0; i < executeCopiedOnMainThread.Count; i++)
+            for (int i = 0; i < ExecuteCopiedOnMainThread.Count; i++)
             {
-                executeCopiedOnMainThread[i]();
+                ExecuteCopiedOnMainThread[i]();
             }
         }
+    }
+
+    private void Update()
+    {
+        UpdateMain();
     }
 }
