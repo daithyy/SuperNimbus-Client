@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Net;
 
 public partial class Client : MonoBehaviour
 {
@@ -23,6 +21,8 @@ public partial class Client : MonoBehaviour
 
     public TCP Tcp;
 
+    public UDP Udp;
+
     private void Awake()
     {
         if (Instance == null)
@@ -39,6 +39,7 @@ public partial class Client : MonoBehaviour
     private void Start()
     {
         Tcp = new TCP();
+        Udp = new UDP();
     }
 
     public void ConnectToServer()
@@ -52,7 +53,8 @@ public partial class Client : MonoBehaviour
     {
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
-            { (int)ServerPackets.Welcome, ClientHandler.Welcome }
+            { (int)ServerPackets.Welcome, ClientHandler.Welcome },
+            { (int)ServerPackets.UdpTest, ClientHandler.UdpTest }
         };
 
         Debug.Log("Initialize packets");
