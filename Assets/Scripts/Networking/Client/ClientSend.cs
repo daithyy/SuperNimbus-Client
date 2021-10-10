@@ -40,7 +40,11 @@ public class ClientSend : MonoBehaviour
                 packet.Write(action);
             }
 
-            packet.Write(GameManager.Players[Client.Instance.MyId].transform.rotation);
+            PlayerManager playerManager = GameManager.Players[Client.Instance.MyId];
+
+            packet.Write(playerManager.transform.rotation);
+
+            packet.Write(playerManager.transform.GetChild(0).transform.eulerAngles);
 
             SendUDPData(packet);
         }

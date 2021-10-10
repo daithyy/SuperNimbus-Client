@@ -32,7 +32,7 @@ public class ClientHandler : MonoBehaviour
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
-        //GameManager.Players[id].transform.GetChild(0).gameObject.GetComponent<CharacterMotor>().DesiredMovementDirection = position;
+        // GameManager.Players[id].transform.GetChild(0).gameObject.GetComponent<CharacterMotor>().DesiredMovementDirection = position;
         GameManager.Players[id].transform.position = position;
     }
 
@@ -40,7 +40,9 @@ public class ClientHandler : MonoBehaviour
     {
         int id = packet.ReadInt();
         Quaternion rotation = packet.ReadQuaternion();
+        Vector3 eulerAngles = packet.ReadVector3();
 
         GameManager.Players[id].transform.rotation = rotation;
+        GameManager.Players[id].transform.GetChild(0).eulerAngles = eulerAngles;
     }
 }
