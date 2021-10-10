@@ -39,6 +39,6 @@ public class AimLookCharacterController : MonoBehaviour {
 		directionVector = (camToCharacterSpace * directionVector);
 		
 		// Apply direction
-		motor.desiredFacingDirection = directionVector;
+		motor.DesiredFacingDirection = directionVector;
 	}
 }

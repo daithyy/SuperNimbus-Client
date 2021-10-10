@@ -54,9 +54,11 @@ public partial class Client : MonoBehaviour
         packetHandlers = new Dictionary<int, PacketHandler>()
         {
             { (int)ServerPackets.Welcome, ClientHandler.Welcome },
-            { (int)ServerPackets.UdpTest, ClientHandler.UdpTest }
+            { (int)ServerPackets.SpawnPlayer, ClientHandler.SpawnPlayer },
+            { (int)ServerPackets.PlayerPosition, ClientHandler.PlayerPosition },
+            { (int)ServerPackets.PlayerRotation, ClientHandler.PlayerRotation },
         };
 
-        Debug.Log("Initialize packets");
+        Debug.Log("Initialized packets");
     }
 }

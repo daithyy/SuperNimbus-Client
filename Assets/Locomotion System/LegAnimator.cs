@@ -368,9 +368,9 @@ public class LegAnimator : MonoBehaviour {
 		// When calculating speed, clamp vertical speed to be no longer than horizontal speed
 		// to avoid sudden spikes when CharacterController walks up a step.
 		Vector3 velocityVClamped = Util.ProjectOntoPlane(tr.velocity, up);
-		speed = velocityVClamped.magnitude / 1.5f;
+		speed = velocityVClamped.magnitude;
 		velocityVClamped = velocityVClamped + up * Mathf.Clamp(Vector3.Dot(tr.velocity, up), -speed, speed);
-		speed = velocityVClamped.magnitude / 1.5f;
+		speed = velocityVClamped.magnitude;
 		
 		hSpeedSmoothed = Util.ProjectOntoPlane(tr.velocitySmoothed, up).magnitude;
 		

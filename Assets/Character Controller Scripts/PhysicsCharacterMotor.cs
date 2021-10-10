@@ -33,7 +33,7 @@ public class PhysicsCharacterMotor : CharacterMotor {
 					+ transform.up
 					+ Quaternion.AngleAxis(360*i/8.0f, transform.up)
 						* (transform.right*0.5f)
-					+ desiredVelocity*0.2f;
+					+ DesiredVelocity*0.2f;
 			if ( Physics.Raycast(rayStart, transform.up*-2, out hit, 3.0f, groundLayers.value) ) {
 				desiredUp += hit.normal;
 			}
@@ -53,13 +53,13 @@ public class PhysicsCharacterMotor : CharacterMotor {
 	
 	private void UpdateFacingDirection() {
 		// Calculate which way character should be facing
-		float facingWeight = desiredFacingDirection.magnitude;
+		float facingWeight = DesiredFacingDirection.magnitude;
 		Vector3 combinedFacingDirection = (
-			transform.rotation * desiredMovementDirection * (1-facingWeight)
-			+ desiredFacingDirection * facingWeight
+			transform.rotation * DesiredMovementDirection * (1-facingWeight)
+			+ DesiredFacingDirection * facingWeight
 		);
 		combinedFacingDirection = Util.ProjectOntoPlane(combinedFacingDirection, transform.up);
-		combinedFacingDirection = alignCorrection * combinedFacingDirection;
+		combinedFacingDirection = AlignCorrection * combinedFacingDirection;
 		
 		if (combinedFacingDirection.sqrMagnitude > 0.1f) {
 			Vector3 newForward = Util.ConstantSlerp(
@@ -77,32 +77,32 @@ public class PhysicsCharacterMotor : CharacterMotor {
 	
 	private void UpdateVelocity() {
 		Vector3 velocity = GetComponent<Rigidbody>().velocity;
-		if (grounded) velocity = Util.ProjectOntoPlane(velocity, transform.up);
+		if (Grounded) velocity = Util.ProjectOntoPlane(velocity, transform.up);
 		
 		// Calculate how fast we should be moving
-		jumping = false;
-		if (grounded) {
+		Jumping = false;
+		if (Grounded) {
 			// Apply a force that attempts to reach our target velocity
-			Vector3 velocityChange = (desiredVelocity - velocity);
-			if (velocityChange.magnitude > maxVelocityChange) {
-				velocityChange = velocityChange.normalized * maxVelocityChange;
+			Vector3 velocityChange = (DesiredVelocity - velocity);
+			if (velocityChange.magnitude > MaxVelocityChange) {
+				velocityChange = velocityChange.normalized * MaxVelocityChange;
 			}
 			GetComponent<Rigidbody>().AddForce(velocityChange, ForceMode.VelocityChange);
 		
 			// Jump
-			if (canJump && Input.GetButton("Jump")) {
-				GetComponent<Rigidbody>().velocity = velocity + transform.up * Mathf.Sqrt(2 * jumpHeight * gravity);
-				jumping = true;
+			if (CanJump && Input.GetButton("Jump")) {
+				GetComponent<Rigidbody>().velocity = velocity + transform.up * Mathf.Sqrt(2 * JumpHeight * Gravity);
+				Jumping = true;
 			}
 		}
 		
 		// Apply downwards gravity
-		GetComponent<Rigidbody>().AddForce(transform.up * -gravity * GetComponent<Rigidbody>().mass);
+		GetComponent<Rigidbody>().AddForce(transform.up * -Gravity * GetComponent<Rigidbody>().mass);
 		
-		grounded = false;
+		Grounded = false;
 	}
 	void OnCollisionStay () {
-		grounded = true;
+		Grounded = true;
 	}
 	
 	void FixedUpdate () {

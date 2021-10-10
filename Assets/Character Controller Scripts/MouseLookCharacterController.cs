@@ -47,6 +47,6 @@ public class MouseLookCharacterController : MonoBehaviour {
 		Quaternion xQuaternion = Quaternion.AngleAxis (rotationX, Vector3.up);
 		Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, -Vector3.right);
 		
-		motor.desiredFacingDirection = originalRotation * xQuaternion * yQuaternion * Vector3.forward;
+		motor.DesiredFacingDirection = originalRotation * xQuaternion * yQuaternion * Vector3.forward;
 	}
 }

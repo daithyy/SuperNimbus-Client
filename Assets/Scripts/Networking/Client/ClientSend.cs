@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ClientSend : MonoBehaviour
@@ -32,11 +29,18 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void UdpTestReceived()
+    public static void PlayerMovement(bool[] actions)
     {
-        using (Packet packet = new Packet((int)ClientPackets.UdpTestReceived))
+        using (Packet packet = new Packet((int)ClientPackets.PlayerMovement))
         {
-            packet.Write("Received a UDP packet.");
+            packet.Write(actions.Length);
+            
+            foreach (bool action in actions)
+            {
+                packet.Write(action);
+            }
+
+            packet.Write(GameManager.Players[Client.Instance.MyId].transform.rotation);
 
             SendUDPData(packet);
         }

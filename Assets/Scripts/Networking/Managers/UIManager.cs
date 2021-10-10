@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+
+    public GameObject MenuCamera;
 
     public GameObject StartMenu;
 
@@ -28,6 +28,12 @@ public class UIManager : MonoBehaviour
     {
         StartMenu.SetActive(false);
         UsernameField.interactable = false;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+
         Client.Instance.ConnectToServer();
+
+        MenuCamera.SetActive(false);
     }
 }

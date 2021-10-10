@@ -25,7 +25,7 @@ public class AccelerationCharacterController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Get input vector from kayboard or analog stick and make it length 1 at most
-		Vector3 directionVector = motor.desiredMovementDirection;
+		Vector3 directionVector = motor.DesiredMovementDirection;
 		directionVector.z += Input.GetAxis("Vertical")*Time.deltaTime*accelerationSpeed;
 		directionVector.x += Input.GetAxis("Horizontal")*Time.deltaTime*accelerationSpeed;
 		if (directionVector.magnitude>1) directionVector = directionVector.normalized;
@@ -40,9 +40,9 @@ public class AccelerationCharacterController : MonoBehaviour {
 		Quaternion xQuaternion = Quaternion.AngleAxis (rotationX, Vector3.up);
 		Quaternion yQuaternion = Quaternion.AngleAxis (rotationY, -Vector3.right);
 		
-		motor.desiredFacingDirection = originalRotation * xQuaternion * yQuaternion * Vector3.forward;
+		motor.DesiredFacingDirection = originalRotation * xQuaternion * yQuaternion * Vector3.forward;
 		
 		// Apply direction
-		motor.desiredMovementDirection = directionVector;
+		motor.DesiredMovementDirection = directionVector;
 	}
 }

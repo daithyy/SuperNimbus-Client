@@ -50,6 +50,6 @@ public class PlatformCharacterController : MonoBehaviour {
 		}
 		
 		// Apply direction
-		motor.desiredMovementDirection = directionVector;
+		motor.DesiredMovementDirection = directionVector;
 	}
 }

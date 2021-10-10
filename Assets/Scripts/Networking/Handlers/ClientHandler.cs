@@ -17,12 +17,30 @@ public class ClientHandler : MonoBehaviour
         Client.Instance.Udp.Connect(((IPEndPoint)Client.Instance.Tcp.Socket.Client.LocalEndPoint).Port);
     }
 
-    public static void UdpTest(Packet packet)
+    public static void SpawnPlayer(Packet packet)
     {
-        string msg = packet.ReadString();
+        int id = packet.ReadInt();
+        string username = packet.ReadString();
+        Vector3 position = packet.ReadVector3();
+        Quaternion rotation = packet.ReadQuaternion();
 
-        Debug.Log($"SERVER MESSAGE: Received packet via UDP: {msg}");
+        GameManager.Instance.SpawnPlayer(id, username, position, rotation);
+    }
 
-        ClientSend.UdpTestReceived();
+    public static void PlayerPosition(Packet packet)
+    {
+        int id = packet.ReadInt();
+        Vector3 position = packet.ReadVector3();
+
+        //GameManager.Players[id].transform.GetChild(0).gameObject.GetComponent<CharacterMotor>().DesiredMovementDirection = position;
+        GameManager.Players[id].transform.position = position;
+    }
+
+    public static void PlayerRotation(Packet packet)
+    {
+        int id = packet.ReadInt();
+        Quaternion rotation = packet.ReadQuaternion();
+
+        GameManager.Players[id].transform.rotation = rotation;
     }
 }

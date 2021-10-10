@@ -54,13 +54,13 @@ public class WanderingAICharacterController : MonoBehaviour {
 		
 		// apply vectors
 		float moveVectorMag = moveVector.magnitude;
-		motor.desiredFacingDirection = faceVector;
+		motor.DesiredFacingDirection = faceVector;
 		if (moveVectorMag<idleThreshold) {
-			motor.desiredMovementDirection = Vector3.zero;
-			if (onlyWalkForward) motor.desiredFacingDirection = Vector3.zero;
+			motor.DesiredMovementDirection = Vector3.zero;
+			if (onlyWalkForward) motor.DesiredFacingDirection = Vector3.zero;
 		}
 		else {
-			motor.desiredMovementDirection =
+			motor.DesiredMovementDirection =
 			Quaternion.Inverse(transform.rotation)
 				* (moveVector/moveVectorMag)
 				* ((moveVectorMag-idleThreshold)/(1-idleThreshold));

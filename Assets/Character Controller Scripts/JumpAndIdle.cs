@@ -1,5 +1,4 @@
 using UnityEngine;
-using Fragsurf.Movement;
 
 [RequireComponent(typeof(AlignmentTracker))]
 public class JumpAndIdle : MonoBehaviour {
@@ -8,7 +7,6 @@ public class JumpAndIdle : MonoBehaviour {
 	public float jumpTimeStart = 0.0f;
 	public float fallTimeThreshold = 0.2f;
 	public AnimationClip waitingAnimation;
-	public SurfCharacter surfCharacter;
 
 	private bool doJumping = false;
 	private bool doWaiting = false;
@@ -49,40 +47,40 @@ public class JumpAndIdle : MonoBehaviour {
 		float speed = align.velocity.magnitude;
 		
 		// CrossFade quick to jumping animation while not grounded
-		if (doJumping) {
-			// If the jump button has been pressed
-			if (surfCharacter.controller.jumping) {
-				grounded = false;
-				waiting = false;
-				// Fade to jumping animation quickly
-				GetComponent<Animation>().CrossFade(jumpingAnimation.name, 0.3f);
-				GetComponent<Animation>()[jumpingAnimation.name].time = jumpTimeStart;
-				GetComponent<Animation>()[jumpingAnimation.name].wrapMode = WrapMode.ClampForever;
-			}
-			// If the character has walked over a ledge and is now in air
-			else if (grounded && surfCharacter.controller.jumping) {
-				grounded = false;
-				waiting = false;
-			}
-			// If the character has landed on the ground again
-			else if (!grounded && !surfCharacter.controller.jumping) {
-				grounded = true;
-				waiting = false;
-				fallingTimer = 0;
-				// Fade to locomotion motion group quickly
-				GetComponent<Animation>().CrossFade("locomotion", 0.4f);
-			}
-			// If the character is falling
-			else if (!grounded && fallingTimer<fallTimeThreshold) {
-				fallingTimer += Time.deltaTime;
-				if (fallingTimer>=fallTimeThreshold) {
-					// Fade to jumping motion group slowly
-					GetComponent<Animation>().CrossFade(jumpingAnimation.name, 0.4f);
-					GetComponent<Animation>()[jumpingAnimation.name].time = jumpTimeStart;
-					GetComponent<Animation>()[jumpingAnimation.name].wrapMode = WrapMode.ClampForever;
-				}
-			}
-		}
+		//if (doJumping) {
+		//	// If the jump button has been pressed
+		//	if (surfCharacter.controller.jumping) {
+		//		grounded = false;
+		//		waiting = false;
+		//		// Fade to jumping animation quickly
+		//		GetComponent<Animation>().CrossFade(jumpingAnimation.name, 0.3f);
+		//		GetComponent<Animation>()[jumpingAnimation.name].time = jumpTimeStart;
+		//		GetComponent<Animation>()[jumpingAnimation.name].wrapMode = WrapMode.ClampForever;
+		//	}
+		//	// If the character has walked over a ledge and is now in air
+		//	else if (grounded && surfCharacter.controller.jumping) {
+		//		grounded = false;
+		//		waiting = false;
+		//	}
+		//	// If the character has landed on the ground again
+		//	else if (!grounded && !surfCharacter.controller.jumping) {
+		//		grounded = true;
+		//		waiting = false;
+		//		fallingTimer = 0;
+		//		// Fade to locomotion motion group quickly
+		//		GetComponent<Animation>().CrossFade("locomotion", 0.4f);
+		//	}
+		//	// If the character is falling
+		//	else if (!grounded && fallingTimer<fallTimeThreshold) {
+		//		fallingTimer += Time.deltaTime;
+		//		if (fallingTimer>=fallTimeThreshold) {
+		//			// Fade to jumping motion group slowly
+		//			GetComponent<Animation>().CrossFade(jumpingAnimation.name, 0.4f);
+		//			GetComponent<Animation>()[jumpingAnimation.name].time = jumpTimeStart;
+		//			GetComponent<Animation>()[jumpingAnimation.name].wrapMode = WrapMode.ClampForever;
+		//		}
+		//	}
+		//}
 		
 		// CrossFade to waiting animation when inactive for a little while
 		if (doWaiting) {

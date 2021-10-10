@@ -22,7 +22,7 @@ public class Follower : MonoBehaviour {
 		
 		// Apply direction
 		CharacterMotor motor = GetComponent(typeof(CharacterMotor)) as CharacterMotor;
-		motor.desiredMovementDirection = directionVector;
-		motor.desiredFacingDirection = targetVector;
+		motor.DesiredMovementDirection = directionVector;
+		motor.DesiredFacingDirection = targetVector;
 	}
 }

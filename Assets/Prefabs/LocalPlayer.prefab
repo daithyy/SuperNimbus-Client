@@ -164,9 +164,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8585799335350594639}
   - component: {fileID: 3364819824705084909}
-  - component: {fileID: 4883690934560902951}
+  - component: {fileID: 6152180070258440526}
   m_Layer: 8
-  m_Name: Player
+  m_Name: LocalPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 0
   Username: 
---- !u!114 &4883690934560902951
+--- !u!114 &6152180070258440526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -449,7 +449,7 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 2a571b638e15546f09e0fa746a884b3e, type: 2}
-  - {fileID: 2100000, guid: b3726e974ef02e442983f9cdfa1e0e43, type: 2}
+  - {fileID: 2100000, guid: 2fbc7c70b457f425695256fa490bcf50, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2090,7 +2090,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8585799336424422571
 Transform:
   m_ObjectHideFlags: 0
@@ -43977,7 +43977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8585799336530027401
 Transform:
   m_ObjectHideFlags: 0
@@ -44925,7 +44925,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2f9364e230d178e49ba20f75a8cb10ec, type: 2}
+  - {fileID: 2100000, guid: 36aea82242551db45aa1697e0b6c5f95, type: 2}
   - {fileID: 2100000, guid: c4e91c09b50c82843aad2e1cc0011224, type: 2}
   - {fileID: 2100000, guid: 8afd718b6b321e341a7779ae676bada7, type: 2}
   m_StaticBatchInfo:

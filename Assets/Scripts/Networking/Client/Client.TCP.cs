@@ -65,7 +65,7 @@ public partial class Client
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ERROR receiving TCP Data: {ex}");
+                Console.WriteLine($"ERROR: Receiving TCP Data: {ex}");
             }
         }
 
