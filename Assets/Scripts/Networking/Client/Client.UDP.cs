@@ -52,7 +52,7 @@ public partial class Client
 
                 if (data.Length < 4)
                 {
-                    // TODO: Handle disconnection
+                    Instance.Disconnect();
                     return;
                 }
 
@@ -60,7 +60,7 @@ public partial class Client
             }
             catch (Exception ex)
             {
-                // TODO: Handle disconnection
+                Disconnect();
             }
         }
 
@@ -82,6 +82,14 @@ public partial class Client
                     packetHandlers[packetId](packet);
                 }
             });
+        }
+
+        private void Disconnect()
+        {
+            Instance.Disconnect();
+
+            EndPoint = null;
+            Socket = null;
         }
     }
 }

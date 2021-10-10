@@ -52,9 +52,9 @@ public class FPSCharacterController : MonoBehaviour
         }
 
         // Apply velocity in the LOCAL movement direction
-        //motor.DesiredMovementDirection = directionVector;
+        motor.DesiredMovementDirection = directionVector;
 
 		// Send velocity to REMOTE movement direction (Server Authoriative movement)
-		ClientSend.PlayerMovement(moveDir);
+		//ClientSend.PlayerMovement(moveDir);
 	}
 }

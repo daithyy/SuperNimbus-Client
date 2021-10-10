@@ -8,7 +8,7 @@ public class ClientHandler : MonoBehaviour
         string msg = packet.ReadString();
         int myId = packet.ReadInt();
 
-        Debug.Log($"SERVER MESSAGE: {msg}");
+        Debug.Log($"Server Response: {msg}");
 
         Client.Instance.MyId = myId;
 

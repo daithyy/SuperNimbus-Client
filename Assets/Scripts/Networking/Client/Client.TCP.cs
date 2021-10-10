@@ -27,6 +27,21 @@ public partial class Client
             Socket.BeginConnect(Instance.Ip, Instance.Port, ConnectCallback, Socket);
         }
 
+        public void SendData(Packet packet)
+        {
+            try
+            {
+                if (Socket != null)
+                {
+                    stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log($"ERROR: Sending data to server via TCP {ex}");
+            }
+        }
+
         private void ConnectCallback(IAsyncResult result)
         {
             Socket.EndConnect(result);
@@ -51,6 +66,7 @@ public partial class Client
 
                 if (byteLength <= 0)
                 {
+                    Instance.Disconnect();
                     return;
                 }
 
@@ -66,6 +82,7 @@ public partial class Client
             catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: Receiving TCP Data: {ex}");
+                Disconnect();
             }
         }
 
@@ -120,19 +137,14 @@ public partial class Client
             return false;
         }
 
-        public void SendData(Packet packet)
+        private void Disconnect()
         {
-            try
-            {
-                if (Socket != null)
-                {
-                    stream.BeginWrite(packet.ToArray(), 0, packet.Length(), null, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.Log($"ERROR: Sending data to server via TCP {ex}");
-            }
+            Instance.Disconnect();
+
+            stream = null;
+            receivedData = null;
+            receiveBuffer = null;
+            Socket = null;
         }
     }
 }
