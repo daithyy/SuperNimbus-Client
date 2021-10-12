@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
 
         player.GetComponent<PlayerManager>().Id = id;
         player.GetComponent<PlayerManager>().Username = username;
+        player.GetComponent<PlayerManager>().JumpController = player.GetComponent<JumpController>();
 
         Players.Add(id, player.GetComponent<PlayerManager>());
     }

@@ -23,13 +23,18 @@ public class PlayerController : MonoBehaviour
 
         if (WalkMultiplier != 1)
         {
-            if ((Input.GetKey("left shift") || Input.GetKey("right shift")) != DefaultIsWalk)
+            if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) != DefaultIsWalk)
             {
                 directionVector *= WalkMultiplier;
             }
         }
 
+		bool[] actions = new bool[]
+		{
+			Input.GetKey(KeyCode.Space),
+		};
+
 		// Send input direction to REMOTE server (Server Authoriative movement)
-		ClientSend.PlayerMovement(directionVector);
+		ClientSend.PlayerMovement(directionVector, actions);
 	}
 }

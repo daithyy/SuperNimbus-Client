@@ -44,4 +44,13 @@ public class ClientHandler : MonoBehaviour
         GameManager.Players[id].transform.rotation = rotation;
         GameManager.Players[id].transform.GetChild(0).eulerAngles = eulerAngles;
     }
+
+    public static void PlayerAnimation(Packet packet)
+    {
+        int id = packet.ReadInt();
+        bool jumping = packet.ReadBool();
+        bool grounded = packet.ReadBool();
+
+        GameManager.Players[id].JumpController.ReadActions(jumping, grounded);
+    }
 }

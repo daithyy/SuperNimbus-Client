@@ -42421,6 +42421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6902651a0fd6829499c3056b748fbee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  JumpController: {fileID: 0}
   Id: 0
   Username: 
 --- !u!1 &7485254721078498027
@@ -43175,7 +43176,7 @@ GameObject:
   - component: {fileID: 7485254721797194060}
   - component: {fileID: 7485254721797194058}
   - component: {fileID: 7485254721797194061}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}

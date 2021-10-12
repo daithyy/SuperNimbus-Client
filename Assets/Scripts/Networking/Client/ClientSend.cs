@@ -29,7 +29,7 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void PlayerMovement(Vector3 inputDirection)
+    public static void PlayerMovement(Vector3 inputDirection, bool[] actions)
     {
         using (Packet packet = new Packet((int)ClientPackets.PlayerMovement))
         {
@@ -40,6 +40,13 @@ public class ClientSend : MonoBehaviour
             packet.Write(playerManager.transform.rotation);
 
             packet.Write(playerManager.transform.GetChild(0).transform.eulerAngles);
+
+            packet.Write(actions.Length);
+
+            for (int i = 0; i < actions.Length; i++)
+            {
+                packet.Write(actions[i]);
+            }
 
             SendUDPData(packet);
         }
