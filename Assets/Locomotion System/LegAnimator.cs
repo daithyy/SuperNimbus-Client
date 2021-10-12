@@ -1536,10 +1536,6 @@ public class LegAnimator : MonoBehaviour {
 			if (intersections!=null) hipMaxHeight = intersections[1];
 			else {
 				hipMaxHeight = Vector3.Dot(legStates[leg].ankle - legs[leg].hip.position, legsUp);
-				UnityEngine.Debug.Log(
-					gameObject.name
-					+": Line-sphere intersection failed for leg "+leg+", hipMaxHeight."
-				);
 			}
 			
 			// Find the lowest (and average) heights

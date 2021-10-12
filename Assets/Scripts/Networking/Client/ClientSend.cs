@@ -29,18 +29,13 @@ public class ClientSend : MonoBehaviour
         }
     }
 
-    public static void PlayerMovement(bool[] actions)
+    public static void PlayerMovement(Vector3 inputDirection)
     {
         using (Packet packet = new Packet((int)ClientPackets.PlayerMovement))
         {
-            packet.Write(actions.Length);
-            
-            foreach (bool action in actions)
-            {
-                packet.Write(action);
-            }
-
             PlayerManager playerManager = GameManager.Players[Client.Instance.MyId];
+
+            packet.Write(inputDirection);
 
             packet.Write(playerManager.transform.rotation);
 

@@ -347,13 +347,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
-  m_LocalRotation: {x: 0.63402236, y: -0.2556509, z: 0.04037601, w: 0.7287168}
+  m_LocalRotation: {x: 0.5747357, y: -0.12258412, z: -0.16079932, w: 0.79296637}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 70.855, y: -78.512, z: -54.001}
+  m_LocalEulerAnglesHint: {x: 60.7, y: -50.8, z: -54.001}
 --- !u!1 &939108990
 GameObject:
   m_ObjectHideFlags: 0
@@ -1150,8 +1150,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715ea7497b827b04dbb2abd8d2e58b14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LocalPlayerPrefab: {fileID: 8585799335350594633, guid: 8246bec311fc4684da04e99c2f8e5e94, type: 3}
-  PlayerPrefab: {fileID: 8585799335350594633, guid: fd20cac8879b99e45bdd538990551ba9, type: 3}
+  LocalPlayerPrefab: {fileID: 7485254721074144080, guid: 71a2d238edceb6848ae6cf3c716e96ff, type: 3}
+  PlayerPrefab: {fileID: 5014255077935894448, guid: 6286d48ada58dbb48bb73c40bdbf88e4, type: 3}
 --- !u!4 &2062391438
 Transform:
   m_ObjectHideFlags: 0
@@ -1196,7 +1196,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262713785209258753}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1

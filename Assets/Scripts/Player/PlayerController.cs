@@ -1,22 +1,35 @@
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour 
 {
+	public float WalkMultiplier = 0.5f;
+
+	public bool DefaultIsWalk = false;
+
     private void FixedUpdate()
     {
-        SendInputToServer();
-    }
+		ReadInput();
+	}
 
-    private void SendInputToServer()
+	private void ReadInput()
     {
-        bool[] actions = new bool[]
-        {
-            Input.GetKey(KeyCode.W),
-            Input.GetKey(KeyCode.S),
-            Input.GetKey(KeyCode.A),
-            Input.GetKey(KeyCode.D),
-        };
+		// Get input vector from keyboard or analog stick and make it length 1 at most
+		Vector3 directionVector = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
 
-        ClientSend.PlayerMovement(actions);
-    }
+		if (directionVector.magnitude > 1)
+		{
+			directionVector = directionVector.normalized;
+        }
+
+        if (WalkMultiplier != 1)
+        {
+            if ((Input.GetKey("left shift") || Input.GetKey("right shift")) != DefaultIsWalk)
+            {
+                directionVector *= WalkMultiplier;
+            }
+        }
+
+		// Send input direction to REMOTE server (Server Authoriative movement)
+		ClientSend.PlayerMovement(directionVector);
+	}
 }
