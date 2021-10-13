@@ -32,7 +32,10 @@ public class ClientHandler : MonoBehaviour
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
-        GameManager.Players[id].transform.position = position;
+        if (GameManager.Players.TryGetValue(id, out PlayerManager player))
+        {
+            player.transform.position = position;
+        }
     }
 
     public static void PlayerRotation(Packet packet)
@@ -41,8 +44,11 @@ public class ClientHandler : MonoBehaviour
         Quaternion rotation = packet.ReadQuaternion();
         Vector3 eulerAngles = packet.ReadVector3();
 
-        GameManager.Players[id].transform.rotation = rotation;
-        GameManager.Players[id].transform.GetChild(0).eulerAngles = eulerAngles;
+        if (GameManager.Players.TryGetValue(id, out PlayerManager player))
+        {
+            player.transform.rotation = rotation;
+            player.transform.GetChild(0).eulerAngles = eulerAngles;
+        }
     }
 
     public static void PlayerAnimation(Packet packet)

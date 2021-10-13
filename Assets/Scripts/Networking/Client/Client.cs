@@ -14,7 +14,7 @@ public partial class Client : MonoBehaviour
 
     public static readonly int DataBufferSize = BufferConstant;
 
-    public string Ip = "127.0.0.1";
+    public string Ip = "185.108.129.11";
 
     public int Port = 26950;
 
@@ -39,12 +39,6 @@ public partial class Client : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Tcp = new TCP();
-        Udp = new UDP();
-    }
-
     private void OnApplicationQuit()
     {
         Disconnect();
@@ -52,6 +46,9 @@ public partial class Client : MonoBehaviour
 
     public void ConnectToServer()
     {
+        Tcp = new TCP();
+        Udp = new UDP();
+
         InitializeClientData();
 
         isConnected = true;
