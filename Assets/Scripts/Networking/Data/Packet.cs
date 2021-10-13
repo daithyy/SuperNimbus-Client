@@ -12,6 +12,9 @@ public enum ServerPackets
     PlayerRotation,
     PlayerAnimation,
     PlayerDisconnected,
+    CreateSpawner,
+    ItemSpawn,
+    ItemCollect,
 }
 
 /// <summary>Sent from client to server.</summary>

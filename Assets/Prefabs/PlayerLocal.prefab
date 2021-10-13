@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 4278735599781164299}
   m_Layer: 0
   m_Name: PlayerLocal
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -42421,9 +42421,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6902651a0fd6829499c3056b748fbee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  JumpController: {fileID: 0}
   Id: 0
   Username: 
+  TotalItemCount: 0
+  JumpController: {fileID: 0}
 --- !u!1 &7485254721078498027
 GameObject:
   m_ObjectHideFlags: 0

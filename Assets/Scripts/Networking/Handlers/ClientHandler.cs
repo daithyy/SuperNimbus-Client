@@ -61,4 +61,29 @@ public class ClientHandler : MonoBehaviour
         Destroy(GameManager.Players[id].gameObject);
         GameManager.Players.Remove(id);
     }
+
+    public static void CreateSpawner(Packet packet)
+    {
+        int id = packet.ReadInt();
+        Vector3 position = packet.ReadVector3();
+        bool hasItem = packet.ReadBool();
+
+        GameManager.Instance.CreateSpawner(id, position, hasItem);
+    }
+
+    public static void ItemSpawn(Packet packet)
+    {
+        int id = packet.ReadInt();
+
+        GameManager.Spawners[id].ItemSpawn();
+    }
+
+    public static void ItemCollect(Packet packet)
+    {
+        int id = packet.ReadInt();
+        int playerId = packet.ReadInt();
+
+        GameManager.Spawners[id].ItemCollect();
+        GameManager.Players[playerId].ItemCount++;
+    }
 }

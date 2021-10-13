@@ -16,7 +16,7 @@ public class AimController : MonoBehaviour
     public float maxYRotation = 90f;
 
     //The real rotation of the camera without recoil
-    private Vector3 realRotation;
+    private Vector3 realRotation = new Vector3(0, 90, 0);
 
     [Header("Aimpunch")]
     [Tooltip("bigger number makes the response more damped, smaller is less damped, currently the system will overshoot, with larger damping values it won't")]

@@ -6,6 +6,8 @@ public class PlayerManager : MonoBehaviour
 
     public string Username;
 
+    public int ItemCount = 0;
+
     [Header("References")]
     [HideInInspector]
     public JumpController JumpController;
