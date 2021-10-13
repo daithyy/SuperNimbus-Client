@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class AlignmentTracker : MonoBehaviour {
 	
-	public bool fixedUpdate = false;
+	public bool fixedUpdate = true;
 
 	private float m_CurrentFixedTime;
 	private float m_CurrentLateTime;

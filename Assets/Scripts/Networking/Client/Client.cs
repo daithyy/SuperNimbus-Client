@@ -67,6 +67,8 @@ public partial class Client : MonoBehaviour
             { (int)ServerPackets.SpawnPlayer, ClientHandler.SpawnPlayer },
             { (int)ServerPackets.PlayerPosition, ClientHandler.PlayerPosition },
             { (int)ServerPackets.PlayerRotation, ClientHandler.PlayerRotation },
+            { (int)ServerPackets.PlayerAnimation, ClientHandler.PlayerAnimation },
+            { (int)ServerPackets.PlayerDisconnected, ClientHandler.PlayerDisconnected }
         };
 
         Debug.Log("Initialized packets");

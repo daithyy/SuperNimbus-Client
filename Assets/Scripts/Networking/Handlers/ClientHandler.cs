@@ -53,4 +53,12 @@ public class ClientHandler : MonoBehaviour
 
         GameManager.Players[id].JumpController.ReadActions(jumping, grounded);
     }
+
+    public static void PlayerDisconnected(Packet packet)
+    {
+        int id = packet.ReadInt();
+
+        Destroy(GameManager.Players[id].gameObject);
+        GameManager.Players.Remove(id);
+    }
 }

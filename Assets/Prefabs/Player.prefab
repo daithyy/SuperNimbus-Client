@@ -42916,7 +42916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffa96f0d60aa34fd39866ca241722d93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fixedUpdate: 0
+  fixedUpdate: 1
 --- !u!114 &5014255077935894456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43000,6 +43000,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6902651a0fd6829499c3056b748fbee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  JumpController: {fileID: 0}
   Id: 0
   Username: 
 --- !u!1 &5014255077953156152

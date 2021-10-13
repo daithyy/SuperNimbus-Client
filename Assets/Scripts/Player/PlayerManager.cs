@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public JumpController JumpController;
-
     public int Id;
 
     public string Username;
+
+    [Header("References")]
+    [HideInInspector]
+    public JumpController JumpController;
 }

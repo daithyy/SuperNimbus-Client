@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-/// <summary>Sent from server to client.</summary>
+/// <summary>Receiving from server to this client.</summary>
 public enum ServerPackets
 {
     Welcome = 1,
     SpawnPlayer,
     PlayerPosition,
     PlayerRotation,
+    PlayerAnimation,
+    PlayerDisconnected,
 }
 
 /// <summary>Sent from client to server.</summary>
