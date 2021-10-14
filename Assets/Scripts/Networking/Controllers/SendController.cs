@@ -1,15 +1,15 @@
 using UnityEngine;
 
-public class ClientSend : MonoBehaviour
+public class SendController : MonoBehaviour
 {
-    private static void SendTCPData(Packet packet)
+    private static void SendTcpData(Packet packet)
     {
         packet.WriteLength();
 
         Client.Instance.Tcp.SendData(packet);
     }
 
-    private static void SendUDPData(Packet packet)
+    private static void SendUdpData(Packet packet)
     {
         packet.WriteLength();
 
@@ -25,7 +25,7 @@ public class ClientSend : MonoBehaviour
             packet.Write(Client.Instance.MyId);
             packet.Write(UIManager.Instance.UsernameField.text);
 
-            SendTCPData(packet);
+            SendTcpData(packet);
         }
     }
 
@@ -48,7 +48,17 @@ public class ClientSend : MonoBehaviour
                 packet.Write(actions[i]);
             }
 
-            SendUDPData(packet);
+            SendUdpData(packet);
+        }
+    }
+
+    public static void MessageClient(string message)
+    {
+        using (Packet packet = new Packet((int)ClientPackets.MessageClient))
+        {
+            packet.Write(message);
+
+            SendTcpData(packet);
         }
     }
 

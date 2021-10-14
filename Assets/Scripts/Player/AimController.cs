@@ -2,10 +2,6 @@
 
 public class AimController : MonoBehaviour
 {
-    [Header("References")]
-    public Transform bodyTransform;
-    public Transform targetTransform;
-
     [Header("Sensitivity")]
     public float sensitivityMultiplier = 1f;
     public float horizontalSensitivity = 1f;
@@ -14,9 +10,6 @@ public class AimController : MonoBehaviour
     [Header("Restrictions")]
     public float minYRotation = -90f;
     public float maxYRotation = 90f;
-
-    //The real rotation of the camera without recoil
-    private Vector3 realRotation = new Vector3(0, 90, 0);
 
     [Header("Aimpunch")]
     [Tooltip("bigger number makes the response more damped, smaller is less damped, currently the system will overshoot, with larger damping values it won't")]
@@ -31,7 +24,19 @@ public class AimController : MonoBehaviour
     [HideInInspector]
     public Vector2 punchAngleVel;
 
-    private void Update()
+    private Transform bodyTransform;
+    private Transform targetTransform;
+
+    //The real rotation of the camera without recoil
+    private Vector3 realRotation = new Vector3(0, 90, 0);
+
+    private void Start()
+    {
+        bodyTransform = transform;
+        targetTransform = transform.GetChild(0);
+    }
+
+    public void UpdateView()
     {
         // Fix pausing
         if (Mathf.Abs(Time.timeScale) <= 0)

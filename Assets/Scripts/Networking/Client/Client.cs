@@ -1,20 +1,17 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public partial class Client : MonoBehaviour
 {
-    private const int BufferConstant = 4096;
-
     private static Dictionary<int, PacketHandler> packetHandlers;
 
     private delegate void PacketHandler(Packet packet);
 
     public static Client Instance;
 
-    public static readonly int DataBufferSize = BufferConstant;
+    public static readonly int DataBufferSize = Constants.BufferConstant;
 
-    public string Ip = "185.108.129.11";
+    public string Ip = Constants.LocalHostIp;
 
     public int Port = 26950;
 
@@ -69,6 +66,7 @@ public partial class Client : MonoBehaviour
             { (int)ServerPackets.CreateSpawner, ClientHandler.CreateSpawner },
             { (int)ServerPackets.ItemSpawn, ClientHandler.ItemSpawn },
             { (int)ServerPackets.ItemCollect, ClientHandler.ItemCollect },
+            { (int)ServerPackets.MessageServer, ClientHandler.MessageServer },
         };
 
         Debug.Log("Initialized packets");

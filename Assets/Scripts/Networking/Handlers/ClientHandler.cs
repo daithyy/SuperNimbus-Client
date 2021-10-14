@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using UnityEngine;
 
@@ -8,11 +9,12 @@ public class ClientHandler : MonoBehaviour
         string msg = packet.ReadString();
         int myId = packet.ReadInt();
 
-        Debug.Log($"Server Response: {msg}");
+        Debug.Log($"SERVER: {msg}");
+        UIManager.Instance.ReceiveMessage(new Message(Constants.ServerId, msg, DateTime.Now));
 
         Client.Instance.MyId = myId;
 
-        ClientSend.WelcomeReceived();
+        SendController.WelcomeReceived();
 
         Client.Instance.Udp.Connect(((IPEndPoint)Client.Instance.Tcp.Socket.Client.LocalEndPoint).Port);
     }
@@ -91,5 +93,15 @@ public class ClientHandler : MonoBehaviour
 
         GameManager.Spawners[id].ItemCollect();
         GameManager.Players[playerId].ItemCount++;
+    }
+
+    public static void MessageServer(Packet packet)
+    {
+        int id = packet.ReadInt();
+        string message = packet.ReadString();
+        DateTime datetime = DateTime.TryParse(packet.ReadString(), out datetime) ? datetime : new DateTime();
+        Message chatMsg = new Message(id, message, datetime);
+
+        UIManager.Instance.ReceiveMessage(chatMsg);
     }
 }

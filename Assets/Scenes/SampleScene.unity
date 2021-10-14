@@ -232,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eb1070dfd89d6c48bbab7db4567bb60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Ip: 185.108.129.11
+  Ip: 127.0.0.1
   Port: 26950
   MyId: 0
 --- !u!4 &321325546
@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0.099, a: 0.9019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -787,7 +787,7 @@ GameObject:
   - component: {fileID: 1411921055}
   - component: {fileID: 1411921054}
   m_Layer: 5
-  m_Name: Menu
+  m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -808,6 +808,9 @@ MonoBehaviour:
   MenuCamera: {fileID: 1754101225}
   StartMenu: {fileID: 939108990}
   UsernameField: {fileID: 1303900161}
+  ChatInputPanel: {fileID: 9062602315756912000, guid: 0ab941bb4348e99448f7eb94c0a875ef, type: 3}
+  ChatDisplayLog: {fileID: 6976541993291791987, guid: ba2bac25c0e076a45a249b5996732f2a, type: 3}
+  ChatInputField: {fileID: 0}
 --- !u!114 &1411921055
 MonoBehaviour:
   m_ObjectHideFlags: 0
