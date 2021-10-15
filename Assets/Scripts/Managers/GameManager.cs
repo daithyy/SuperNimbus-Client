@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
         if (id == Client.Instance.MyId)
         {
             player = Instantiate(LocalPlayerPrefab, position, rotation);
+            EventManager.RaiseOnRetrieveLocalPlayerInfo(id, username);
         }
         else
         {

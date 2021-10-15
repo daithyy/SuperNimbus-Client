@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +8,9 @@ public class UIManager : MonoBehaviour
 
     public GameObject MenuCamera;
 
-    public GameObject StartMenu;
+    public InputField IpAddress;
+
+    public InputField Port;
 
     public InputField UsernameField;
 
@@ -15,51 +18,26 @@ public class UIManager : MonoBehaviour
 
     public GameObject ChatDisplayLog;
 
+    public GameObject PlayerInfo;
+
+    public GameObject ServerInfo;
+
+    public GameObject ConnectionFailed;
+
     [HideInInspector]
     public InputField ChatInputField;
 
+    private GameObject StartMenu;
+
     private MessageLog[] logs;
 
-    private enum ChatLogType
-    {
-        Display,
-        Input,
-    }
+    private bool connectionFail = true;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Debug.Log("Instance already exists, destroying object!");
-            Destroy(this);
-        }
-    }
+    private bool connectionSuccess = false;
 
     public void ConnectToServer()
     {
-        ToggleCursor(false);
-        StartMenu.SetActive(false);
-        UsernameField.interactable = false;
-
-        ChatInputPanel = Instantiate(ChatInputPanel, transform);
-        ChatInputField = ChatInputPanel.GetComponentInChildren<ChatInputField>().MessageInput;
-
-        Client.Instance.ConnectToServer();
-
-        ChatInputPanel.SetActive(false);
-
-        ChatDisplayLog = Instantiate(ChatDisplayLog, transform);
-        ChatDisplayLog.SetActive(true);
-
-        logs = new MessageLog[2];
-        logs[0] = ChatInputPanel.GetComponentInChildren<MessageLog>();
-        logs[1] = ChatDisplayLog.gameObject.GetComponentInChildren<MessageLog>();
-
-        MenuCamera.SetActive(false);
+        Client.Instance.ConnectToServer(IpAddress.text, Port.text);
     }
 
     public void ToggleCursor(bool toggle)
@@ -75,9 +53,115 @@ public class UIManager : MonoBehaviour
         ChatDisplayLog.SetActive(!toggle);
     }
 
-    public void ReceiveMessage(Message message)
+    public void SendMessage(Message message)
     {
-        logs[0].ReceiveMessage(message);
-        logs[1].ReceiveMessage(message);
+        logs[(int)ChatLogType.Input].ReceiveMessage(message);
+        logs[(int)ChatLogType.Display].ReceiveMessage(message);
+    }
+
+    private enum ChatLogType
+    {
+        Input,
+        Display,
+    }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Debug.Log("Instance already exists, destroying object!");
+            Destroy(this);
+        }
+    }
+
+    private void Start()
+    {
+        IpAddress.text = Client.Instance.Ip;
+        Port.text = Client.Instance.Port.ToString();
+
+        StartMenu = transform.GetChild(0).gameObject;
+
+        ConnectionFailed = Instantiate(ConnectionFailed, StartMenu.transform);
+        ConnectionFailed.SetActive(false);
+
+        logs = new MessageLog[2];
+
+        CreateChat();
+        CreateChatLog();
+    }
+
+    private void Update()
+    {
+        if (!connectionFail && ConnectionFailed != null)
+        {
+            ConnectionFailed.SetActive(true);
+        }
+
+        if (connectionSuccess)
+        {
+            connectionSuccess = false;
+            CreateRemainingUI();
+        }
+    }
+
+    private void OnEnable()
+    {
+        EventManager.onServerConnect += ConnectionCheck;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.onServerConnect -= ConnectionCheck;
+    }
+
+    private void ConnectionCheck(bool isConnected)
+    {
+        if (!isConnected)
+        {
+            connectionFail = isConnected;
+        }
+        else
+        {
+            connectionSuccess = isConnected;
+        }
+    }
+
+    private void DisableMainMenu()
+    {
+        ToggleCursor(false);
+        StartMenu.SetActive(false);
+        UsernameField.interactable = false;
+    }
+
+    private void CreateChat()
+    {
+        ChatInputPanel = Instantiate(ChatInputPanel, transform);
+        ChatInputField = ChatInputPanel.GetComponentInChildren<ChatInputField>().MessageInput;
+        ChatInputPanel.SetActive(false);
+        logs[(int)ChatLogType.Input] = ChatInputPanel.GetComponentInChildren<MessageLog>();
+    }
+
+    private void CreateChatLog()
+    {
+        ChatDisplayLog = Instantiate(ChatDisplayLog, transform);
+        ChatDisplayLog.SetActive(false);
+        logs[(int)ChatLogType.Display] = ChatDisplayLog.gameObject.GetComponentInChildren<MessageLog>();
+    }
+
+    private void CreateRemainingUI()
+    {
+        DisableMainMenu();
+
+        ChatDisplayLog.SetActive(true);
+
+        ServerInfo = Instantiate(ServerInfo, transform);
+        
+        PlayerInfo = Instantiate(PlayerInfo, transform);
+
+        MenuCamera.SetActive(false);
     }
 }

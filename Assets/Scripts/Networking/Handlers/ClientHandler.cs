@@ -6,12 +6,13 @@ public class ClientHandler : MonoBehaviour
 {
     public static void Welcome(Packet packet)
     {
+        EventManager.RaiseOnServerConnect(true);
+
         string msg = packet.ReadString();
         int myId = packet.ReadInt();
 
         Debug.Log($"SERVER: {msg}");
-        UIManager.Instance.ReceiveMessage(new Message(Constants.ServerId, msg, DateTime.Now));
-
+        
         Client.Instance.MyId = myId;
 
         SendController.WelcomeReceived();
@@ -102,6 +103,6 @@ public class ClientHandler : MonoBehaviour
         DateTime datetime = DateTime.TryParse(packet.ReadString(), out datetime) ? datetime : new DateTime();
         Message chatMsg = new Message(id, message, datetime);
 
-        UIManager.Instance.ReceiveMessage(chatMsg);
+        UIManager.Instance.SendMessage(chatMsg);
     }
 }

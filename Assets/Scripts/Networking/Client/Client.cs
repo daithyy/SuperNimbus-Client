@@ -41,10 +41,13 @@ public partial class Client : MonoBehaviour
         Disconnect();
     }
 
-    public void ConnectToServer()
+    public void ConnectToServer(string ipAddress, string port)
     {
         Tcp = new TCP();
         Udp = new UDP();
+
+        if (ipAddress.Length > 0) Ip = ipAddress;
+        if (port.Length > 0) Port = int.Parse(port);
 
         InitializeClientData();
 

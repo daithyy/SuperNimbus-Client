@@ -88,11 +88,14 @@ public class MessageLog : MonoBehaviour
         {
             switch (message.Type)
             {
-                case MessageType.PlayerMessage:
-                    sb.Append($"\n<size=18>{message.ReceivedAt.ToString("T", CultureInfo.CurrentCulture)}</size> <color=#FFF545>{message.Username}</color> > {message.Text}");
-                    break;
                 case MessageType.ServerMessage:
                     sb.Append($"\n<size=18>{message.ReceivedAt.ToString("T", CultureInfo.CurrentCulture)}</size> <i><color=#66D9EF>{message.Username}</color> > {message.Text}</i>");
+                    break;
+                case MessageType.GameMessage:
+                    sb.Append($"\n<size=18>{message.ReceivedAt.ToString("T", CultureInfo.CurrentCulture)}</size> <i><color=#00FF00>{message.Username}</color> > {message.Text}</i>");
+                    break;
+                case MessageType.PlayerMessage:
+                    sb.Append($"\n<size=18>{message.ReceivedAt.ToString("T", CultureInfo.CurrentCulture)}</size> <color=#FFF545>{message.Username}</color> > {message.Text}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

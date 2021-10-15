@@ -9,5 +9,9 @@ public class Constants
 
     public const int ServerId = -1;
 
+    public const int GameId = -2;
+
     public const string ServerName = "Server";
+
+    public const string GameName = "Game";
 }

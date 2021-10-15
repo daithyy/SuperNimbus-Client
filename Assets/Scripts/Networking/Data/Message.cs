@@ -3,6 +3,7 @@
 public enum MessageType
 {
     ServerMessage,
+    GameMessage,
     PlayerMessage
 }
 
@@ -21,6 +22,11 @@ public class Message
         Username = (id == Constants.ServerId) ? Constants.ServerName.ToUpper() : GameManager.Players[id].Username;
         Text = message;
         ReceivedAt = datetime;
-        Type = (id == Constants.ServerId) ? MessageType.ServerMessage : MessageType.PlayerMessage;
+        Type = id switch
+        {
+            Constants.ServerId => MessageType.ServerMessage,
+            Constants.GameId => MessageType.GameMessage,
+            _ => MessageType.PlayerMessage,
+        };
     }
 }
