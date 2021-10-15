@@ -40,7 +40,7 @@ public partial class Client
             catch (Exception ex) 
             {
                 Debug.Log($"ERROR: Sending data to server via UDP: {ex}");
-                UIManager.Instance.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now));
+                UIManager.Instance.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now.ToString()));
             }
         }
 

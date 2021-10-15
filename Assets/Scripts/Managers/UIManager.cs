@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject ServerInfo;
 
-    public GameObject ConnectionFailed;
+    public Text InfoField;
 
     [HideInInspector]
     public InputField ChatInputField;
@@ -85,9 +85,6 @@ public class UIManager : MonoBehaviour
 
         StartMenu = transform.GetChild(0).gameObject;
 
-        ConnectionFailed = Instantiate(ConnectionFailed, StartMenu.transform);
-        ConnectionFailed.SetActive(false);
-
         logs = new MessageLog[2];
 
         CreateChat();
@@ -96,9 +93,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (!connectionFail && ConnectionFailed != null)
+        if (!connectionFail && InfoField != null)
         {
-            ConnectionFailed.SetActive(true);
+            InfoField.text = "<color=#FF0041>Could not connect to IP and port entered. Please try again.</color>";
         }
 
         if (connectionSuccess)

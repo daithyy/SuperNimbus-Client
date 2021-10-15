@@ -17,11 +17,11 @@ public class Message
     
     public MessageType Type;
 
-    public Message(int id, string message, DateTime datetime)
+    public Message(int id, string message, string datetime)
     {
         Username = (id == Constants.ServerId) ? Constants.ServerName.ToUpper() : GameManager.Players[id].Username;
         Text = message;
-        ReceivedAt = datetime;
+        ReceivedAt = DateTime.TryParse(datetime, out ReceivedAt) ? ReceivedAt : new DateTime();
         Type = id switch
         {
             Constants.ServerId => MessageType.ServerMessage,
