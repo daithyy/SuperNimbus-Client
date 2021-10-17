@@ -6,14 +6,32 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    public NakamaManager Nakama;
+
     public GameObject MenuCamera;
 
-    public InputField IpAddress;
+    [Header("Main Menu UI")]
+    [Header("Game Server Input Fields")]
+    public InputField ServerIp;
 
-    public InputField Port;
+    public InputField ServerPort;
+
+    [Header("Nakama Input Fields")]
+    public InputField NakamaIp;
+
+    public InputField NakamaPort;
+
+    [Header("User Input Fields")]
+    public InputField EmailField;    
 
     public InputField UsernameField;
 
+    public InputField PasswordField;
+
+    public Text InfoField;
+
+    [Header("Game Display UI")]
+    [Header("HUD")]
     public GameObject ChatInputPanel;
 
     public GameObject ChatDisplayLog;
@@ -21,8 +39,6 @@ public class UIManager : MonoBehaviour
     public GameObject PlayerInfo;
 
     public GameObject ServerInfo;
-
-    public Text InfoField;
 
     [HideInInspector]
     public InputField ChatInputField;
@@ -35,9 +51,23 @@ public class UIManager : MonoBehaviour
 
     private bool connectionSuccess = false;
 
-    public void ConnectToServer()
+    public async void NakamaConnect()
     {
-        Client.Instance.ConnectToServer(IpAddress.text, Port.text);
+        await Nakama.Connect(EmailField.text, UsernameField.text, PasswordField.text);
+    }
+
+    public async void NakamaRegister()
+    {
+        bool userCreated = await Nakama.Register(EmailField.text, UsernameField.text, PasswordField.text);
+
+        if (userCreated)
+        {
+            SendConnectionMessage($"<color=#00FF00>{UsernameField.text}</color> has been registered to Nakama successfully!");
+        }
+        else
+        {
+            SendConnectionMessage(Constants.UI.RegistrationFailed);
+        }
     }
 
     public void ToggleCursor(bool toggle)
@@ -57,6 +87,11 @@ public class UIManager : MonoBehaviour
     {
         logs[(int)ChatLogType.Input].ReceiveMessage(message);
         logs[(int)ChatLogType.Display].ReceiveMessage(message);
+    }
+
+    public void SendConnectionMessage(string message)
+    {
+        InfoField.text = message;
     }
 
     private enum ChatLogType
@@ -80,8 +115,9 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        IpAddress.text = Client.Instance.Ip;
-        Port.text = Client.Instance.Port.ToString();
+        Nakama = new NakamaManager();
+
+        FillInputData();
 
         StartMenu = transform.GetChild(0).gameObject;
 
@@ -95,7 +131,7 @@ public class UIManager : MonoBehaviour
     {
         if (!connectionFail && InfoField != null)
         {
-            InfoField.text = "<color=#FF0041>Could not connect to IP and port entered. Please try again.</color>";
+            SendConnectionMessage(Constants.UI.ConnectionFailed);
         }
 
         if (connectionSuccess)
@@ -160,5 +196,19 @@ public class UIManager : MonoBehaviour
         PlayerInfo = Instantiate(PlayerInfo, transform);
 
         MenuCamera.SetActive(false);
+    }
+
+    private void FillInputData()
+    {
+        ServerIp.text = Constants.IpDefault;
+        ServerPort.text = Constants.Port.ToString();
+
+        NakamaIp.text = Constants.IpDefault;
+        NakamaPort.text = Constants.Port.ToString();
+
+        if (PlayerPrefs.HasKey(NakamaManager.EmailIdentifierPrefName))
+        {
+            EmailField.text = PlayerPrefs.GetString(NakamaManager.EmailIdentifierPrefName);
+        }
     }
 }

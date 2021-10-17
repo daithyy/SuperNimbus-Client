@@ -11,9 +11,9 @@ public partial class Client : MonoBehaviour
 
     public static readonly int DataBufferSize = Constants.BufferConstant;
 
-    public string Ip = Constants.LocalHostIp;
+    public string Ip = Constants.IpDefault;
 
-    public int Port = 26950;
+    public int Port = Constants.Port;
 
     public int MyId = 0;
 
@@ -41,13 +41,10 @@ public partial class Client : MonoBehaviour
         Disconnect();
     }
 
-    public void ConnectToServer(string ipAddress, string port)
+    public void ConnectToServer()
     {
         Tcp = new TCP();
         Udp = new UDP();
-
-        if (ipAddress.Length > 0) Ip = ipAddress;
-        if (port.Length > 0) Port = int.Parse(port);
 
         InitializeClientData();
 
