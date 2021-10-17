@@ -1,16 +1,15 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
-
-    public NakamaManager Nakama;
-
-    public GameObject MenuCamera;
+    public GameObject MainMenuCamera;
 
     [Header("Main Menu UI")]
+    public GameObject LoadingIcon;
+
+    public GameObject ButtonContainer;
+
     [Header("Game Server Input Fields")]
     public InputField ServerIp;
 
@@ -22,7 +21,7 @@ public class UIManager : MonoBehaviour
     public InputField NakamaPort;
 
     [Header("User Input Fields")]
-    public InputField EmailField;    
+    public InputField EmailField;
 
     public InputField UsernameField;
 
@@ -30,7 +29,7 @@ public class UIManager : MonoBehaviour
 
     public Text InfoField;
 
-    [Header("Game Display UI")]
+    [Header("Game UI Prefabs")]
     [Header("HUD")]
     public GameObject ChatInputPanel;
 
@@ -43,31 +42,28 @@ public class UIManager : MonoBehaviour
     [HideInInspector]
     public InputField ChatInputField;
 
-    private GameObject StartMenu;
+    private GameObject MainMenu;
 
     private MessageLog[] logs;
 
-    private bool connectionFail = true;
-
-    private bool connectionSuccess = false;
-
-    public async void NakamaConnect()
+    private enum ChatLogType
     {
-        await Nakama.Connect(EmailField.text, UsernameField.text, PasswordField.text);
+        Input,
+        Display,
     }
 
-    public async void NakamaRegister()
+    void Start()
     {
-        bool userCreated = await Nakama.Register(EmailField.text, UsernameField.text, PasswordField.text);
+        PrefillInputData();
 
-        if (userCreated)
-        {
-            SendConnectionMessage($"<color=#00FF00>{UsernameField.text}</color> has been registered to Nakama successfully!");
-        }
-        else
-        {
-            SendConnectionMessage(Constants.UI.RegistrationFailed);
-        }
+        MainMenu = transform.GetChild(0).gameObject;
+
+        LoadingIcon.SetActive(false);
+
+        logs = new MessageLog[2];
+
+        CreateChat();
+        CreateChatLog();
     }
 
     public void ToggleCursor(bool toggle)
@@ -89,85 +85,36 @@ public class UIManager : MonoBehaviour
         logs[(int)ChatLogType.Display].ReceiveMessage(message);
     }
 
-    public void SendConnectionMessage(string message)
+    public void SendMainMenuMessage(string message)
     {
         InfoField.text = message;
     }
 
-    private enum ChatLogType
+    public void CreatePlayerHud()
     {
-        Input,
-        Display,
-    }
+        DisableMainMenu();
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else if (Instance != this)
-        {
-            Debug.Log("Instance already exists, destroying object!");
-            Destroy(this);
-        }
-    }
+        ChatDisplayLog.SetActive(true);
 
-    private void Start()
-    {
-        Nakama = new NakamaManager();
+        ServerInfo = Instantiate(ServerInfo, transform);
 
-        FillInputData();
+        PlayerInfo = Instantiate(PlayerInfo, transform);
 
-        StartMenu = transform.GetChild(0).gameObject;
-
-        logs = new MessageLog[2];
-
-        CreateChat();
-        CreateChatLog();
-    }
-
-    private void Update()
-    {
-        if (!connectionFail && InfoField != null)
-        {
-            SendConnectionMessage(Constants.UI.ConnectionFailed);
-        }
-
-        if (connectionSuccess)
-        {
-            connectionSuccess = false;
-            CreateRemainingUI();
-        }
-    }
-
-    private void OnEnable()
-    {
-        EventManager.onServerConnect += ConnectionCheck;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.onServerConnect -= ConnectionCheck;
-    }
-
-    private void ConnectionCheck(bool isConnected)
-    {
-        if (!isConnected)
-        {
-            connectionFail = isConnected;
-        }
-        else
-        {
-            connectionSuccess = isConnected;
-        }
+        MainMenuCamera.SetActive(false);
     }
 
     private void DisableMainMenu()
     {
         ToggleCursor(false);
-        StartMenu.SetActive(false);
+        MainMenu.SetActive(false);
+
+        ServerIp.interactable = false;
+        ServerPort.interactable = false;
+        NakamaIp.interactable = false;
+        NakamaPort.interactable = false;
+        EmailField.interactable = false;
         UsernameField.interactable = false;
+        PasswordField.interactable = false;
     }
 
     private void CreateChat()
@@ -185,20 +132,7 @@ public class UIManager : MonoBehaviour
         logs[(int)ChatLogType.Display] = ChatDisplayLog.gameObject.GetComponentInChildren<MessageLog>();
     }
 
-    private void CreateRemainingUI()
-    {
-        DisableMainMenu();
-
-        ChatDisplayLog.SetActive(true);
-
-        ServerInfo = Instantiate(ServerInfo, transform);
-        
-        PlayerInfo = Instantiate(PlayerInfo, transform);
-
-        MenuCamera.SetActive(false);
-    }
-
-    private void FillInputData()
+    private void PrefillInputData()
     {
         ServerIp.text = Constants.IpDefault;
         ServerPort.text = Constants.Port.ToString();

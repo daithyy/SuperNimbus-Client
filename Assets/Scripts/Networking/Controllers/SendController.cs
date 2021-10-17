@@ -22,8 +22,8 @@ public class SendController : MonoBehaviour
     {
         using (Packet packet = new Packet((int)ClientPackets.WelcomeReceived))
         {
-            packet.Write(Client.Instance.MyId);
-            packet.Write(UIManager.Instance.UsernameField.text);
+            packet.Write(Client.Instance.ClientId);
+            packet.Write(GameManager.Instance.User.Username);
 
             SendTcpData(packet);
         }
@@ -33,7 +33,7 @@ public class SendController : MonoBehaviour
     {
         using (Packet packet = new Packet((int)ClientPackets.PlayerMovement))
         {
-            PlayerManager playerManager = GameManager.Players[Client.Instance.MyId];
+            PlayerManager playerManager = EntityManager.Players[Client.Instance.ClientId];
 
             packet.Write(inputDirection);
 

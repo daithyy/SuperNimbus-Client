@@ -30,7 +30,7 @@ public partial class Client
         {
             try
             {
-                packet.InsertInt(Instance.MyId);
+                packet.InsertInt(Instance.ClientId);
 
                 if (Socket != null)
                 {
@@ -40,7 +40,7 @@ public partial class Client
             catch (Exception ex) 
             {
                 Debug.Log($"ERROR: Sending data to server via UDP: {ex}");
-                UIManager.Instance.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now.ToString()));
+                GameManager.Instance.UI.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now.ToString()));
             }
         }
 

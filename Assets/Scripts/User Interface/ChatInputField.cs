@@ -36,7 +36,7 @@ public class ChatInputField : MonoBehaviour
             MessageInput.ActivateInputField();
             MessageInput.Select();
 
-            UIManager.Instance.ToggleChat(!PlayerController.LockInput);
+            GameManager.Instance.UI.ToggleChat(!PlayerController.LockInput);
             PlayerController.LockInput = !PlayerController.LockInput;
         }
     }

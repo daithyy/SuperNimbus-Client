@@ -30,8 +30,9 @@ public class Constants
 
     public class UI
     {
-        public const string ConnectionFailed = "<color=#FF0041>Could not connect to Game Server IP and port entered. Please try again.</color>";
+        public const string ConnectionFailedGameServer = "<color=#FF0041>Failed to connect to Game Server using IP and Port provided. Please exit the game to end the Nakama match and try again.</color>";
+        public const string ConnectionFailedNakama = "<color=#FF0041>Failed to login to Nakama using user details provided. Please try again.</color>";
         public const string EmailAlreadyExist = "A user was found with this email address, please register with a different email address";
-        public const string RegistrationFailed = "<color=#FF0041>Failed to register user, please check your connection and that your credentials are valid.</color>";
+        public const string RegistrationFailed = "<color=#FF0041>Failed to register user. Please try again.</color>";
     }
 }

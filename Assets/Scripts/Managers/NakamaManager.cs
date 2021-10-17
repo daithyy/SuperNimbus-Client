@@ -5,9 +5,11 @@ using static Constants.Nakama;
 
 public class NakamaManager
 {
-    public IClient Client;
+    public User User;
 
-    public ISession Session;
+    private IClient client;
+
+    private ISession session;
 
     public ISocket Socket;
 
@@ -19,78 +21,76 @@ public class NakamaManager
 
     private string currentMatchId;
 
-    /// <summary>
-    /// Connects to the Nakama server using email authentication and opens socket for realtime communication.
-    /// </summary>
-    public async Task Connect(string email, string username, string password)
-    {
-        // Connect to the Nakama server.
-        Client = new Nakama.Client(Scheme, UIManager.Instance.ServerIp.text, Port, ServerKey, UnityWebRequestAdapter.Instance);
-
-        // Attempt to restore an existing user session.
-        var authToken = PlayerPrefs.GetString(SessionPrefName);
-        if (!string.IsNullOrEmpty(authToken))
-        {
-            var session = Nakama.Session.Restore(authToken);
-            if (!session.IsExpired)
-            {
-                Session = session;
-            }
-        }
-
-        // If we weren't able to restore an existing session, authenticate to create a new user session.
-        if (Session == null)
-        {
-            string savedEmail = PlayerPrefs.GetString(EmailIdentifierPrefName);
-
-            if (email != savedEmail)
-            {
-                // Store the email identifier to ensure we retrieve the same one each time from now on.
-                PlayerPrefs.SetString(EmailIdentifierPrefName, email);
-            }
-
-            // Use Nakama email authentication to create a new session using the provided email
-            Session = await Client.AuthenticateEmailAsync(email, password, username, create: false);
-
-            // Store the auth token that comes back so that we can restore the session later if necessary.
-            PlayerPrefs.SetString(SessionPrefName, Session.AuthToken);
-        }
-
-        // Open a new Socket for realtime communication.
-        Socket = Client.NewSocket();
-        await Socket.ConnectAsync(Session, true);
-    }
+    private IMatch currentMatch;
 
     /// <summary>
     /// Registers to the Nakama server providing email, username and password.
     /// </summary>
-    public async Task<bool> Register(string email, string username, string password)
+    public async Task<bool> Register()
     {
-        // Connect to the Nakama server.
-        Client = new Nakama.Client(Scheme, UIManager.Instance.ServerIp.text, Port, ServerKey, UnityWebRequestAdapter.Instance);
+        client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
 
         string savedEmail = PlayerPrefs.GetString(EmailIdentifierPrefName);
 
-        if (email != savedEmail)
+        if (User.Email != savedEmail)
         {
-            // Store the email identifier to ensure we retrieve the same one each time from now on.
-            PlayerPrefs.SetString(EmailIdentifierPrefName, email);
+            PlayerPrefs.SetString(EmailIdentifierPrefName, User.Email);
         }
 
-        // Use Nakama email authentication to register a new user
-        ISession user = await Client.AuthenticateEmailAsync(email, password, username);
+        ISession session = await client.AuthenticateEmailAsync(User.Email, User.Password, User.Username);
 
-        return user.Created;
+        return session.Created;
+    }
+
+    /// <summary>
+    /// Connects to the Nakama server using email authentication and opens socket for realtime communication.
+    /// </summary>
+    public async Task<bool> Connect()
+    {
+        client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
+
+        var authToken = PlayerPrefs.GetString(SessionPrefName);
+        if (!string.IsNullOrEmpty(authToken))
+        {
+            var session = Session.Restore(authToken);
+            if (!session.IsExpired)
+            {
+                this.session = session;
+            }
+        }
+
+        if (session == null)
+        {
+            string savedEmail = PlayerPrefs.GetString(EmailIdentifierPrefName);
+
+            if (User.Email != savedEmail)
+            {
+                PlayerPrefs.SetString(EmailIdentifierPrefName, User.Email);
+            }
+
+            session = await client.AuthenticateEmailAsync(User.Email, User.Password, User.Username, create: false);
+
+            PlayerPrefs.SetString(SessionPrefName, session.AuthToken);
+        }
+
+        Socket = client.NewSocket();
+        await Socket.ConnectAsync(session, true);
+
+        return Socket.IsConnected;
     }
 
     /// <summary>
     /// Starts looking for a match with a given number of minimum players.
     /// </summary>
-    public async Task FindMatch(int minPlayers = 2)
+    public async Task FindMatch(int minPlayers = 2, int maxPlayers = 8)
     {
-        // Add this client to the matchmaking pool and get a ticket.
-        var matchmakerTicket = await Socket.AddMatchmakerAsync("*", minPlayers, minPlayers);
+        var matchmakerTicket = await Socket.AddMatchmakerAsync("*", minPlayers, maxPlayers);
         currentMatchmakingTicket = matchmakerTicket.Ticket;
+    }
+
+    public async Task JoinMatch(IMatchmakerMatched matchmakerMatched)
+    {
+        currentMatch = await Socket.JoinMatchAsync(matchmakerMatched);
     }
 
     /// <summary>
@@ -99,5 +99,17 @@ public class NakamaManager
     public async Task CancelMatchmaking()
     {
         await Socket.RemoveMatchmakerAsync(currentMatchmakingTicket);
+    }
+
+    /// <summary>
+    /// Quits the current match.
+    /// </summary>
+    /// <returns></returns>
+    public async Task Disconnect()
+    {
+        if (currentMatch != null)
+        {
+            await Socket.LeaveMatchAsync(currentMatch);
+        }
     }
 }

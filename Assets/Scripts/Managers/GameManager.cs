@@ -1,20 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance;    
 
-    public static Dictionary<int, PlayerManager> Players = new Dictionary<int, PlayerManager>();
+    public NakamaManager Nakama;
 
-    public static Dictionary<int, Spawner> Spawners = new Dictionary<int, Spawner>();
+    [Header("User Management")]
+    public GameObject Canvas;
 
-    public GameObject LocalPlayerPrefab;
+    [HideInInspector]
+    public UIManager UI;
 
-    public GameObject PlayerPrefab;
+    public User User;
 
-    public GameObject SpawnerPrefab;
+    [HideInInspector]
+    public string NakamaIp;
+
+    [Header("Spawn Management")]
+    public GameObject EntityManager;
+
+    [HideInInspector]
+    public EntityManager Spawn;
+
+    private bool connectionFail = true;
+
+    private bool connectionSuccess = false;
 
     private void Awake()
     {
@@ -29,35 +40,126 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SpawnPlayer(int id, string username, Vector3 position, Quaternion rotation)
+    private void Start()
     {
-        GameObject player; 
+        Nakama = new NakamaManager();
 
-        if (id == Client.Instance.MyId)
+        UI = Canvas.GetComponent<UIManager>();
+        Spawn = EntityManager.GetComponent<EntityManager>();
+    }
+
+    private void Update()
+    {
+        if (!connectionFail && UI.InfoField != null)
         {
-            player = Instantiate(LocalPlayerPrefab, position, rotation);
-            EventManager.RaiseOnRetrieveLocalPlayerInfo(id, username);
+            UI.SendMainMenuMessage(Constants.UI.ConnectionFailedGameServer);
+            connectionFail = true;
+        }
+
+        if (connectionSuccess)
+        {
+            connectionSuccess = false;
+            UI.CreatePlayerHud();
+        }
+    }
+
+    private async void OnApplicationQuit()
+    {
+        await Nakama.Disconnect();
+    }
+
+    private void StoreDataFromUI()
+    {
+        User = new User(UI.EmailField.text, UI.UsernameField.text, UI.PasswordField.text);
+        Nakama.User = User;
+
+        NakamaIp = UI.NakamaIp.text;
+    }
+
+    #region NAKAMA 
+
+    public async void NakamaConnect()
+    {
+        StoreDataFromUI();
+        
+        bool connected = await Nakama.Connect();
+
+        if (connected)
+        {
+            UI.SendMainMenuMessage($"<color=#00FF00>{User.Username}</color> has logged in to Nakama successfully!");
+            NakamaFindMatch();
         }
         else
         {
-            player = Instantiate(PlayerPrefab, position, rotation);
+            UI.SendMainMenuMessage(Constants.UI.ConnectionFailedNakama);
         }
 
-        player.GetComponent<PlayerManager>().Id = id;
-        player.GetComponent<PlayerManager>().Username = username;
-        player.GetComponent<PlayerManager>().JumpController = player.GetComponent<JumpController>();
-
-        Players.Add(id, player.GetComponent<PlayerManager>());
+        Nakama.Socket.ReceivedMatchmakerMatched += m => ThreadManager.ExecuteOnMainThread(() => OnMatchFound(m));
     }
 
-    public void CreateSpawner(int id, Vector3 position, bool hasItem)
+    public async void NakamaRegister()
     {
-        GameObject spawner = Instantiate(SpawnerPrefab, position, SpawnerPrefab.transform.rotation);
+        StoreDataFromUI();
 
-        Spawner instance = spawner.GetComponent<Spawner>();
+        bool isRegistered = await Nakama.Register();
 
-        instance.Initialize(id, hasItem);
-
-        Spawners.Add(id, instance);
+        if (isRegistered)
+        {
+            UI.SendMainMenuMessage($"<color=#00FF00>{User.Username}</color> has been registered to Nakama successfully!");
+        }
+        else
+        {
+            UI.SendMainMenuMessage(Constants.UI.RegistrationFailed);
+        }
     }
+
+    private async void NakamaFindMatch()
+    {
+        UI.LoadingIcon.SetActive(true);
+        UI.ButtonContainer.SetActive(false);
+
+        await Nakama.FindMatch();
+    }
+
+    #endregion
+
+    #region EVENTS
+
+    private void OnEnable()
+    {
+        EventManager.onConnectToServer += OnGameServerConnection;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.onConnectToServer -= OnGameServerConnection;
+
+        if (Nakama.Socket != null)
+        {
+            Nakama.Socket.ReceivedMatchmakerMatched -= OnMatchFound;
+        }
+    }
+
+    private void OnGameServerConnection(bool isConnected)
+    {
+        if (!isConnected)
+        {
+            connectionFail = isConnected;
+        }
+        else
+        {
+            connectionSuccess = isConnected;
+        }
+    }
+
+    public async void OnMatchFound(Nakama.IMatchmakerMatched matchmakerMatched)
+    {
+        await Nakama.JoinMatch(matchmakerMatched);
+
+        UI.LoadingIcon.SetActive(false);
+
+        Client.Instance.ConnectToServer(UI.ServerIp.text, int.Parse(UI.ServerPort.text));
+    }
+
+    #endregion
 }

@@ -4,13 +4,13 @@ public class EventManager : MonoBehaviour
 {
     public delegate void OnConnectToServer(bool isConnected);
 
-    public static event OnConnectToServer onServerConnect;
+    public static event OnConnectToServer onConnectToServer;
 
-    public static void RaiseOnServerConnect(bool isConnected)
+    public static void RaiseOnConnectToServer(bool isConnected)
     {
-        if (onServerConnect != null)
+        if (onConnectToServer != null)
         {
-            onServerConnect(isConnected);
+            onConnectToServer(isConnected);
         }
     }
 

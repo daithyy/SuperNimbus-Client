@@ -39,7 +39,7 @@ public partial class Client
             catch (Exception ex)
             {
                 Debug.Log($"ERROR: Sending data to server via TCP {ex}");
-                UIManager.Instance.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now.ToString()));
+                GameManager.Instance.UI.SendMessage(new Message(Constants.GameId, "<color=#FF0041>Lost connection to Game Server.</color>", DateTime.Now.ToString()));
             }
         }
 
@@ -51,7 +51,7 @@ public partial class Client
             }
             catch
             {
-                EventManager.RaiseOnServerConnect(false);
+                EventManager.RaiseOnConnectToServer(false);
             }
 
             if (!Socket.Connected)

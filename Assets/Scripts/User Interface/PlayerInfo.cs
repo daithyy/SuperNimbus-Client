@@ -16,12 +16,12 @@ public class PlayerInfo : TextInfo
 
     public override void Update()
     {
-        if (GameManager.Players.ContainsKey(playerId))
+        if (EntityManager.Players.ContainsKey(playerId))
         {
             textField.text =
             $"\n -- <b>Player:</b> <color=#00FF00>{playerId}</color> -- " +
             $"\nName: <color=#FFF545>{username}</color>" +
-            $"\nCoins Collected: <color=#FFF545>{GameManager.Players[playerId].ItemCount}</color>";
+            $"\nCoins Collected: <color=#FFF545>{EntityManager.Players[playerId].ItemCount}</color>";
         }
     }
 

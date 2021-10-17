@@ -35,10 +35,10 @@ public class PlayerController : MonoBehaviour
 
 	private void ReadInputLocal()
 	{
-		if (Input.GetKeyUp(KeyCode.Y) && !UIManager.Instance.ChatInputField.isFocused)
+		if (Input.GetKeyUp(KeyCode.Y) && !GameManager.Instance.UI.ChatInputField.isFocused)
 		{
 			LockInput = !LockInput;
-			UIManager.Instance.ToggleChat(LockInput);
+			GameManager.Instance.UI.ToggleChat(LockInput);
 		}
 	}
 

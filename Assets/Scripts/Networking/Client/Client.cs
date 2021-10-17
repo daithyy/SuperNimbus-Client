@@ -15,7 +15,7 @@ public partial class Client : MonoBehaviour
 
     public int Port = Constants.Port;
 
-    public int MyId = 0;
+    public int ClientId = 0;
 
     public TCP Tcp;
 
@@ -41,8 +41,11 @@ public partial class Client : MonoBehaviour
         Disconnect();
     }
 
-    public void ConnectToServer()
+    public void ConnectToServer(string ipAddress, int port)
     {
+        Ip = ipAddress;
+        Port = port;
+
         Tcp = new TCP();
         Udp = new UDP();
 

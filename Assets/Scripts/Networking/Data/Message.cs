@@ -19,7 +19,7 @@ public class Message
 
     public Message(int id, string message, string datetime)
     {
-        Username = (id == Constants.ServerId) ? Constants.ServerName.ToUpper() : GameManager.Players[id].Username;
+        Username = (id == Constants.ServerId) ? Constants.ServerName.ToUpper() : EntityManager.Players[id].Username;
         Text = message;
         ReceivedAt = DateTime.TryParse(datetime, out ReceivedAt) ? ReceivedAt : new DateTime();
         Type = id switch

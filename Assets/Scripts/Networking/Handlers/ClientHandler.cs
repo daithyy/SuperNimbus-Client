@@ -6,16 +6,16 @@ public class ClientHandler : MonoBehaviour
 {
     public static void Welcome(Packet packet)
     {
-        EventManager.RaiseOnServerConnect(true);
+        EventManager.RaiseOnConnectToServer(true);
 
         string msg = packet.ReadString();
         int myId = packet.ReadInt();
         string datetime = packet.ReadString();
 
         Debug.Log($"SERVER: {msg}");
-        UIManager.Instance.SendMessage(new Message(Constants.ServerId, msg, datetime));
+        GameManager.Instance.UI.SendMessage(new Message(Constants.ServerId, msg, datetime));
 
-        Client.Instance.MyId = myId;
+        Client.Instance.ClientId = myId;
 
         SendController.WelcomeReceived();
 
@@ -30,9 +30,8 @@ public class ClientHandler : MonoBehaviour
         Quaternion rotation = packet.ReadQuaternion();
         string datetime = packet.ReadString();
 
-        GameManager.Instance.SpawnPlayer(id, username, position, rotation);
-
-        UIManager.Instance.SendMessage(new Message(Constants.ServerId, $"<color=#FFF545>{GameManager.Players[id].Username}</color> has joined the game.", datetime));
+        GameManager.Instance.Spawn.Player(id, username, position, rotation);
+        GameManager.Instance.UI.SendMessage(new Message(Constants.ServerId, $"<color=#FFF545>{EntityManager.Players[id].Username}</color> has joined the game.", datetime));
     }
 
     public static void PlayerPosition(Packet packet)
@@ -40,7 +39,7 @@ public class ClientHandler : MonoBehaviour
         int id = packet.ReadInt();
         Vector3 position = packet.ReadVector3();
 
-        if (GameManager.Players.TryGetValue(id, out PlayerManager player))
+        if (EntityManager.Players.TryGetValue(id, out PlayerManager player))
         {
             player.transform.position = position;
         }
@@ -52,7 +51,7 @@ public class ClientHandler : MonoBehaviour
         Quaternion rotation = packet.ReadQuaternion();
         Vector3 eulerAngles = packet.ReadVector3();
 
-        if (GameManager.Players.TryGetValue(id, out PlayerManager player))
+        if (EntityManager.Players.TryGetValue(id, out PlayerManager player))
         {
             player.transform.rotation = rotation;
             player.transform.GetChild(0).eulerAngles = eulerAngles;
@@ -65,7 +64,7 @@ public class ClientHandler : MonoBehaviour
         bool jumping = packet.ReadBool();
         bool grounded = packet.ReadBool();
 
-        GameManager.Players[id].JumpController.ReadActions(jumping, grounded);
+        EntityManager.Players[id].JumpController.ReadActions(jumping, grounded);
     }
 
     public static void PlayerDisconnected(Packet packet)
@@ -73,10 +72,10 @@ public class ClientHandler : MonoBehaviour
         int id = packet.ReadInt();
         string datetime = packet.ReadString();
 
-        UIManager.Instance.SendMessage(new Message(Constants.ServerId, $"<color=#FFF545>{GameManager.Players[id].Username}</color> has left the game.", datetime));
+        GameManager.Instance.UI.SendMessage(new Message(Constants.ServerId, $"<color=#FFF545>{EntityManager.Players[id].Username}</color> has left the game.", datetime));
 
-        Destroy(GameManager.Players[id].gameObject);
-        GameManager.Players.Remove(id);
+        Destroy(EntityManager.Players[id].gameObject);
+        EntityManager.Players.Remove(id);
     }
 
     public static void CreateSpawner(Packet packet)
@@ -85,14 +84,14 @@ public class ClientHandler : MonoBehaviour
         Vector3 position = packet.ReadVector3();
         bool hasItem = packet.ReadBool();
 
-        GameManager.Instance.CreateSpawner(id, position, hasItem);
+        GameManager.Instance.Spawn.ItemSpawner(id, position, hasItem);
     }
 
     public static void ItemSpawn(Packet packet)
     {
         int id = packet.ReadInt();
 
-        GameManager.Spawners[id].ItemSpawn();
+        EntityManager.Spawners[id].ItemSpawn();
     }
 
     public static void ItemCollect(Packet packet)
@@ -100,8 +99,8 @@ public class ClientHandler : MonoBehaviour
         int id = packet.ReadInt();
         int playerId = packet.ReadInt();
 
-        GameManager.Spawners[id].ItemCollect();
-        GameManager.Players[playerId].ItemCount++;
+        EntityManager.Spawners[id].ItemCollect();
+        EntityManager.Players[playerId].ItemCount++;
     }
 
     public static void MessageServer(Packet packet)
@@ -111,6 +110,6 @@ public class ClientHandler : MonoBehaviour
         string datetime = packet.ReadString();
         Message chatMsg = new Message(id, message, datetime);
 
-        UIManager.Instance.SendMessage(chatMsg);
+        GameManager.Instance.UI.SendMessage(chatMsg);
     }
 }
