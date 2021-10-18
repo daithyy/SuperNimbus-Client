@@ -26,7 +26,10 @@ public class NakamaManager
     /// </summary>
     public async Task<bool> Register()
     {
-        client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
+        if (client == null)
+        {
+            client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
+        }
 
         string savedEmail = PlayerPrefs.GetString(EmailIdentifierPrefName);
 
@@ -45,7 +48,10 @@ public class NakamaManager
     /// </summary>
     public async Task<bool> Connect()
     {
-        client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
+        if (client == null)
+        {
+            client = new Nakama.Client(Scheme, GameManager.Instance.NakamaIp, Port, ServerKey, UnityWebRequestAdapter.Instance);
+        }
 
         var authToken = PlayerPrefs.GetString(SessionPrefName);
         if (!string.IsNullOrEmpty(authToken))
