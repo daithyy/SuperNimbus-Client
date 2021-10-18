@@ -112,4 +112,14 @@ public class ClientHandler : MonoBehaviour
 
         GameManager.Instance.UI.SendMessage(chatMsg);
     }
+
+    public static void ServerValidate(Packet packet)
+    {
+        packet.ReadInt();
+        string message = packet.ReadString();
+        string datetime = packet.ReadString();
+        Message chatMsg = new Message(Constants.ServerId, message, datetime);
+
+        GameManager.Instance.UI.SendMessage(chatMsg);
+    }
 }

@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector]
     public EntityManager Spawn;
 
+    public string Token;
+
     private bool connectionFail = true;
 
     private bool connectionSuccess = false;
@@ -105,7 +107,7 @@ public class GameManager : MonoBehaviour
 
         if (isRegistered)
         {
-            UI.SendMainMenuMessage($"<color=#00FF00>{User.Username}</color> has been registered to Nakama successfully!");
+            UI.SendMainMenuMessage($"<color=#35BAFD>{User.Username}</color> has been registered to Nakama successfully!");
         }
         else
         {
@@ -154,7 +156,10 @@ public class GameManager : MonoBehaviour
 
     public async void OnMatchFound(Nakama.IMatchmakerMatched matchmakerMatched)
     {
+        Token = matchmakerMatched.Token;
+
         await Nakama.JoinMatch(matchmakerMatched);
+        await Nakama.StoreAuth(Token);
 
         UI.LoadingIcon.SetActive(false);
 

@@ -13,15 +13,13 @@ public class NakamaManager
 
     public ISocket Socket;
 
+    public IMatch CurrentMatch;
+
     private const string SessionPrefName = "nakama.session";
 
     public const string EmailIdentifierPrefName = "nakama.emailUniqueIdentifier";
 
     private string currentMatchmakingTicket;
-
-    private string currentMatchId;
-
-    private IMatch currentMatch;
 
     /// <summary>
     /// Registers to the Nakama server providing email, username and password.
@@ -84,13 +82,13 @@ public class NakamaManager
     /// </summary>
     public async Task FindMatch(int minPlayers = 2, int maxPlayers = 8)
     {
-        var matchmakerTicket = await Socket.AddMatchmakerAsync("*", minPlayers, maxPlayers);
+        IMatchmakerTicket matchmakerTicket = await Socket.AddMatchmakerAsync("*", minPlayers, maxPlayers);
         currentMatchmakingTicket = matchmakerTicket.Ticket;
     }
 
     public async Task JoinMatch(IMatchmakerMatched matchmakerMatched)
     {
-        currentMatch = await Socket.JoinMatchAsync(matchmakerMatched);
+        CurrentMatch = await Socket.JoinMatchAsync(matchmakerMatched);
     }
 
     /// <summary>
@@ -101,15 +99,31 @@ public class NakamaManager
         await Socket.RemoveMatchmakerAsync(currentMatchmakingTicket);
     }
 
+    public async Task StoreAuth(string data)
+    {
+        Token obj = new Token() { token = data };
+        string token = JsonUtility.ToJson(obj);
+
+        await client.WriteStorageObjectsAsync(session, new WriteStorageObject[]
+        {
+            new WriteStorageObject()
+            {
+                Collection = "matchToken",
+                Key = CurrentMatch.Id,
+                Value = token
+            }
+        });
+    }
+
     /// <summary>
     /// Quits the current match.
     /// </summary>
     /// <returns></returns>
     public async Task Disconnect()
     {
-        if (currentMatch != null)
+        if (CurrentMatch != null)
         {
-            await Socket.LeaveMatchAsync(currentMatch);
+            await Socket.LeaveMatchAsync(CurrentMatch);
         }
     }
 }

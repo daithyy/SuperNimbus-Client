@@ -16,6 +16,7 @@ public enum ServerPackets
     ItemSpawn,
     ItemCollect,
     MessageServer,
+    ServerValidate,
 }
 
 /// <summary>Sent from client to server.</summary>

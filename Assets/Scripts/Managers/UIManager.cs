@@ -138,7 +138,7 @@ public class UIManager : MonoBehaviour
         ServerPort.text = Constants.Port.ToString();
 
         NakamaIp.text = Constants.IpDefault;
-        NakamaPort.text = Constants.Port.ToString();
+        NakamaPort.text = Constants.Nakama.Port.ToString();
 
         if (PlayerPrefs.HasKey(NakamaManager.EmailIdentifierPrefName))
         {

@@ -24,6 +24,9 @@ public class SendController : MonoBehaviour
         {
             packet.Write(Client.Instance.ClientId);
             packet.Write(GameManager.Instance.User.Username);
+            packet.Write(GameManager.Instance.Nakama.CurrentMatch.Id);
+            packet.Write(GameManager.Instance.Nakama.CurrentMatch.Self.UserId);
+            packet.Write(GameManager.Instance.Token);
 
             SendTcpData(packet);
         }

@@ -70,6 +70,7 @@ public partial class Client : MonoBehaviour
             { (int)ServerPackets.ItemSpawn, ClientHandler.ItemSpawn },
             { (int)ServerPackets.ItemCollect, ClientHandler.ItemCollect },
             { (int)ServerPackets.MessageServer, ClientHandler.MessageServer },
+            { (int)ServerPackets.ServerValidate, ClientHandler.ServerValidate },
         };
 
         Debug.Log("Initialized packets");
@@ -80,7 +81,7 @@ public partial class Client : MonoBehaviour
         if (isConnected)
         {
             isConnected = false;
-
+            
             Tcp.Socket.Close();
             Udp.Socket.Close();
 
