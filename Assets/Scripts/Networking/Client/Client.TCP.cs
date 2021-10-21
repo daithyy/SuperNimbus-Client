@@ -89,7 +89,7 @@ public partial class Client
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ERROR: Receiving TCP Data: {ex}");
+                Debug.Log($"ERROR: Receiving data via TCP: {ex}");
                 Disconnect();
             }
         }

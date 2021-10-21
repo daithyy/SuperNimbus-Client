@@ -64,7 +64,10 @@ public class ClientHandler : MonoBehaviour
         bool jumping = packet.ReadBool();
         bool grounded = packet.ReadBool();
 
-        EntityManager.Players[id].JumpController.ReadActions(jumping, grounded);
+        if (EntityManager.Players.TryGetValue(id, out PlayerManager player))
+        {
+            player.JumpController.ReadActions(jumping, grounded);
+        }
     }
 
     public static void PlayerDisconnected(Packet packet)
