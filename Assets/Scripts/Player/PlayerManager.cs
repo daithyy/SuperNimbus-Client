@@ -11,4 +11,7 @@ public class PlayerManager : MonoBehaviour
     [Header("References")]
     [HideInInspector]
     public JumpController JumpController;
+
+    [HideInInspector]
+    public PlayerInterpolator Interpolator;
 }

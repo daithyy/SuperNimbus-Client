@@ -15,23 +15,26 @@ public class EntityManager : MonoBehaviour
 
     public void Player(int id, string username, Vector3 position, Quaternion rotation)
     {
-        GameObject player; 
+        GameObject prefab; 
 
         if (id == Client.Instance.ClientId)
         {
-            player = Instantiate(LocalPlayerPrefab, position, rotation);
+            prefab = Instantiate(LocalPlayerPrefab, position, rotation);
             EventManager.RaiseOnRetrieveLocalPlayerInfo(id, username);
         }
         else
         {
-            player = Instantiate(PlayerPrefab, position, rotation);
+            prefab = Instantiate(PlayerPrefab, position, rotation);
         }
 
-        player.GetComponent<PlayerManager>().Id = id;
-        player.GetComponent<PlayerManager>().Username = username;
-        player.GetComponent<PlayerManager>().JumpController = player.GetComponent<JumpController>();
+        PlayerManager playerManager = prefab.GetComponent<PlayerManager>();
 
-        Players.Add(id, player.GetComponent<PlayerManager>());
+        playerManager.Id = id;
+        playerManager.Username = username;
+        playerManager.JumpController = prefab.GetComponent<JumpController>();
+        playerManager.Interpolator = prefab.GetComponent<PlayerInterpolator>();
+
+        Players.Add(id, playerManager);
     }
 
     public void ItemSpawner(int id, Vector3 position, bool hasItem)

@@ -41,7 +41,7 @@ public class ClientHandler : MonoBehaviour
 
         if (EntityManager.Players.TryGetValue(id, out PlayerManager player))
         {
-            player.transform.position = position;
+            player.Interpolator.UpdateTransform(GameManager.Instance.Tick, position);
         }
     }
 

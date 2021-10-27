@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 public class Constants
 {
     public const string IpDefault = ipLocal;
@@ -15,6 +17,10 @@ public class Constants
 
     public const string GameName = "Game";
 
+    public const int TickRate = 60;
+
+    public const float SecondsPerTick = 0.016f;
+    
     private const string ipLocal = "127.0.0.1";
 
     private const string ipRemote = "185.108.129.11";

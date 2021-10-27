@@ -462,6 +462,9 @@ MonoBehaviour:
   NakamaIp: 
   EntityManager: {fileID: 2062391436}
   Spawn: {fileID: 0}
+  Token: 
+  Tick: 0
+  TickDelay: 0
 --- !u!1 &223974226
 GameObject:
   m_ObjectHideFlags: 0

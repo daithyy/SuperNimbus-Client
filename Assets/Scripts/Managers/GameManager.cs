@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -25,6 +26,12 @@ public class GameManager : MonoBehaviour
 
     public string Token;
 
+    [HideInInspector]
+    public int Tick = 0;
+
+    [HideInInspector]
+    public int TickDelay = 0;
+
     private bool connectionFail = true;
 
     private bool connectionSuccess = false;
@@ -48,6 +55,12 @@ public class GameManager : MonoBehaviour
 
         UI = Canvas.GetComponent<UIManager>();
         Spawn = EntityManager.GetComponent<EntityManager>();
+    }
+
+    private void FixedUpdate()
+    {
+        Tick += 1;
+        TickDelay = Tick - 6;
     }
 
     private void Update()

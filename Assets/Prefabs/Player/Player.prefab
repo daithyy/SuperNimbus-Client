@@ -1350,6 +1350,7 @@ GameObject:
   - component: {fileID: 5014255077935894460}
   - component: {fileID: 5014255077935894463}
   - component: {fileID: 1808158640552008171}
+  - component: {fileID: 3224015895770684847}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -43002,8 +43003,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Id: 0
   Username: 
-  TotalItemCount: 0
+  ItemCount: 0
   JumpController: {fileID: 0}
+  Interpolator: {fileID: 0}
+--- !u!114 &3224015895770684847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5014255077935894448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59c94ddd2299bc04894e48dadc4d9c5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 1
+  timeElapsed: 0
+  timeToReachTarget: 0.1
+  isLocalRotation: 0
 --- !u!1 &5014255077953156152
 GameObject:
   m_ObjectHideFlags: 0
